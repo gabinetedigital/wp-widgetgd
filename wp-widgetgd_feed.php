@@ -37,7 +37,7 @@ function kbar_load_magpie(){
 	require_once(ABSPATH . WPINC . '/rss-functions.php');
 
 	if (function_exists('fetch_rss'))
-		return true;	
+		return true;
 
 	return false;
 }
@@ -68,7 +68,7 @@ class KB_Adv_RSS extends WP_Widget {
 	var $icon; // URL to an RSS icon to display
 	var $display_empty; // Display an error when feed is down/empty? (false will hide the widget when feed is down)
 	var $reverse_order; // reverse order of feed items?
-	
+
 	var $colunas; //numero de colunas que serao utilizadas na capa
 	var $css_class; //classe de css que pode ser atribuida
 
@@ -141,13 +141,17 @@ class KB_Adv_RSS extends WP_Widget {
 		// display widget
 		extract($args, EXTR_SKIP);
 
-		echo $before_widget;
+		echo "<li class='span".$this->colunas."'>";
+		echo "<div class='thumbnail rss ".$this->css_class."'>";
+
 		if ( $this->title )
 			echo $before_title . $this->title . $after_title;
-		echo $this->output_begin;
+
+		echo "<ul>";
 		echo $this->items;
-		echo $this->output_end;
-		echo $after_widget;
+		echo "</ul>";
+		echo "</div>";
+		echo "</li>";
 
 	}
 
@@ -232,7 +236,7 @@ class KB_Adv_RSS extends WP_Widget {
 
 		$this->colunas = $instance['colunas'];
 		$this->css_class = $instance['css_class'];
-		
+
 		return true;
 	}
 
@@ -369,7 +373,7 @@ class KB_Adv_RSS extends WP_Widget {
 
 		}else{
 			$rss = @fetch_rss($this->url); // get fresh copy
-				
+
 			if ( !is_array($rss->items) || empty( $rss->items ) ){
 				// if fetch failed, then use our cached copy
 				$rss = $this->cached; // use cached copy
@@ -415,10 +419,10 @@ class KB_Adv_RSS extends WP_Widget {
 		// PART II: PREPARE ITEM INFORMATION
 
 		if ( is_array($rss->items) && !empty( $rss->items ) ){	// if there are items in the feed:
-				
+
 			if ($this->reverse_order)
 				$rss->items = array_reverse( $rss->items );
-				
+
 			$rss->items = array_slice($rss->items, 0, $this->num_items);
 
 			// initialize output. Note that $rss->items, $this->items, and $instance['items'] are NOT similar.
@@ -454,7 +458,7 @@ class KB_Adv_RSS extends WP_Widget {
 				$vals = array_values( $find );
 				$this->items .= str_replace( $keys, $vals, $this->output_format );
 			}
-				
+
 			if ($this->utf)
 				$this->items = utf8_encode( $this->items );
 
@@ -561,7 +565,7 @@ class KB_Adv_RSS extends WP_Widget {
 		$utf = (int) $utf;
 		$output_begin = esc_attr( $output_begin );
 		$output_end = esc_attr( $output_end );
-		
+
 		$colunas = esc_attr($colunas);
 		$css_class = esc_attr($css_class);
 
@@ -575,7 +579,7 @@ class KB_Adv_RSS extends WP_Widget {
 
 		if ( !empty($error) )
 			echo '<p class="widget-error"><strong>' . sprintf( __('KB Advanced RSS Error: %s'), $error) . '</strong></p>';
-			
+
 		// form output begins now:
 		?>
 			<!-- <p><strong>For help:</strong> <a href="http://wordpress.org/extend/plugins/kb-advanced-rss-widget/other_notes/">Read the documentation</a>.  -->
@@ -607,7 +611,7 @@ class KB_Adv_RSS extends WP_Widget {
 				<td style="text-align:right;"><input type="checkbox" name="<?php echo $this->get_field_name('display_empty'); ?>" id="<?php echo $this->get_field_id('display_empty'); ?>" value="1" <?php if ( !$display_empty ){ echo 'checked="checked"'; } ?> /> </td>
 				<td colspan="2"><label for="<?php echo $this->get_field_id('display_empty'); ?>">Esconder o widget quando o feed estiver desativado? </label></td>
 			</tr>
-			<!-- 
+			<!--
 			<tr>
 				<td></td>
 				<td style="text-align:right;"><input type="checkbox" name="<?php echo $this->get_field_name('utf'); ?>" id="<?php echo $this->get_field_id('utf'); ?>" value="1" <?php if ( $utf ) { echo 'checked="checked"'; } ?> /> </td>
@@ -628,9 +632,9 @@ class KB_Adv_RSS extends WP_Widget {
 				<td colspan="3"><input style="width: 400px;" id="<?php echo $this->get_field_id('css_class'); ?>" name="<?php echo $this->get_field_name('css_class'); ?>" type="text" value="<?php echo $css_class; ?>" /></td>
 			</tr>
 			</table>
-			<!-- 
+			<!--
 			<p> &nbsp; </p>
-			
+
 			<p><strong>Opcoes de Formatacao</strong><br /><small>Use the default settings to make your feed look like it would using WP's built-in RSS widget. To customize, use the advanced fields below.</small></p>
 			<p style="text-align:center;"><?php _e('What HTML should precede the feed? (Default: &lt;ul&gt;)', 'kbwidgets'); ?></p>
 			<input style="width: 680px;" id="<?php echo $this->get_field_id('output_begin'); ?>" name="<?php echo $this->get_field_name('output_begin'); ?>" type="text" value="<?php echo $output_begin; ?>" />
@@ -639,7 +643,7 @@ class KB_Adv_RSS extends WP_Widget {
 			<p style="text-align:center;"><?php _e("How would you like to format the feed's items? Use <code>^element$</code>. Default:", 'kbwidgets'); ?><br /><small><code>&lt;li&gt;&lt;a href='^link$' title='^description$'&gt;^title$&lt;/a&gt;&lt;/li&gt;</code></small></p>
 			<textarea style="width:680px;height:50px;" id="<?php echo $this->get_field_id('output_format'); ?>" name="<?php echo $this->get_field_name('output_format'); ?>" rows="3" cols="40"><?php echo $output_format; ?></textarea>
 			 -->
-		
+
 		<?php // done with admin form
 	}
 
@@ -661,16 +665,16 @@ function KB_Adv_RSS_process( $widget_rss, $check_feed=true ) { // UPDATED
 	$items = (int) $widget_rss['items'];
 	if ( $items < 1 || KBRSS_MAXITEMS < $items )
 		$items = 10;
-	
+
 	$url           = esc_url_raw(strip_tags( $widget_rss['url'] ));
 	$icon          = esc_url_raw(strip_tags( $widget_rss['icon'] ));
-	
+
 	$valid = array(0,1);
 	$linktitle = (in_array($widget_rss['linktitle'],$valid)) ? (int) $widget_rss['linktitle'] : 0;
 	$display_empty = (in_array($widget_rss['display_empty'],$valid)) ? (int) (1-$widget_rss['display_empty']) : 0;
 	$reverse_order = (in_array($widget_rss['reverse_order'],$valid)) ? (int) $widget_rss['reverse_order'] : 0;
 	$utf = (in_array($widget_rss['utf'],$valid)) ? (int) $widget_rss['utf'] : 0;
-	
+
 	/*if (KBRSS_WPMU){ // extra filters if set TRUE
 		$title     = trim(strip_tags( $widget_rss['title'] ));
 		$output_format = trim( strip_tags( $widget_rss['output_format'] ) );
@@ -686,7 +690,7 @@ function KB_Adv_RSS_process( $widget_rss, $check_feed=true ) { // UPDATED
 	//}
 
 	// done scrubbing input; check the feed if the feed's url changed.
-	
+
 	/*
 	if ( $check_feed ) {
 		$rss = fetch_feed($url);
@@ -701,7 +705,7 @@ function KB_Adv_RSS_process( $widget_rss, $check_feed=true ) { // UPDATED
 		}
 	}
 	*/
-	
+
 	return compact( 'title', 'url', 'link', 'items', 'error', 'icon', 'linktitle', 'display_empty', 'reverse_order', 'utf', 'output_format', 'output_begin', 'output_end', 'colunas', 'css_class' );
 }
 
@@ -718,11 +722,11 @@ function widget_kbrss_troubleshooter(){
 
 	global $userdata;
 	if ( $userdata->user_level >= 7 ){	// that ought to do it
-		
+
 		// try to find magpie:
 		if ( !kbar_load_magpie() )
 			wp_die( "Unable to load up magpie. Sorry." );
-		
+
 		$rss = @fetch_rss($_GET['kbrss']);
 		$out = "<html><head><title>KB RSS Troubleshooter</title></head><body><div style='background:#cc0;padding:1em;'><h2>KB Advanced RSS Troubleshooter</h2><p>Below, you should see the feed as Magpie RSS passes it to the KB Advanced RSS widget. If you don\'t see anything, the feed might be down. Try reloading the page.</p></div><pre>";
 		$out .= htmlspecialchars( print_r($rss->items, true) );

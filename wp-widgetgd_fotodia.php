@@ -16,9 +16,9 @@ class FotoWidget extends WP_Widget
 		$chk_rand = $instance['chk_rand'];
 		$colunas = $instance['colunas'];
 		$css_class = $instance['css_class'];
-		
+
 		?>
-		
+
 		<p><label for="<?php echo $this->get_field_id('titulo'); ?>">Titulo: <input class="widefat" id="<?php echo $this->get_field_id('titulo'); ?>" name="<?php echo $this->get_field_name('titulo'); ?>" type="text" value="<?php echo attribute_escape($titulo); ?>" /></label></p>
   		<p><label for="<?php echo $this->get_field_id('id_galeria'); ?>">ID Galeria: <input class="widefat" id="<?php echo $this->get_field_id('id_galeria'); ?>" name="<?php echo $this->get_field_name('id_galeria'); ?>" type="text" value="<?php echo attribute_escape($id_galeria); ?>" /></label></p>
   		<p><label for="<?php echo $this->get_field_id('chk_rand'); ?>"><input type="checkbox" name="<?php echo $this->get_field_name('chk_rand'); ?>" id="<?php echo $this->get_field_id('chk_rand'); ?>" value="1" <?php if ( $chk_rand ) { echo 'checked="checked"'; } ?> /> Foto randomica</label></p>
@@ -26,7 +26,7 @@ class FotoWidget extends WP_Widget
   		<p><label for="<?php echo $this->get_field_id('css_class'); ?>">Classe CSS: <input class="widefat" id="<?php echo $this->get_field_id('css_class'); ?>" name="<?php echo $this->get_field_name('css_class'); ?>" type="text" value="<?php echo attribute_escape($css_class); ?>" /></label></p>
 <?php
   }
- 
+
   function update($new_instance, $old_instance)
   {
     $instance = $old_instance;
@@ -37,25 +37,27 @@ class FotoWidget extends WP_Widget
     $instance['css_class'] = $new_instance['css_class'];
     return $instance;
   }
- 
+
   function widget($args, $instance)
   {
     extract($args, EXTR_SKIP);
-    
-    echo $before_widget;
+
     $titulo = empty($instance['titulo']) ? ' ' : apply_filters('widget_title', $instance['titulo']);
-    
-    echo $before_title . $titulo . $after_title;;
-    
-    echo 'GALERIA: ' . $instance['id_galeria'];
-    echo '<br>';
-    echo 'COLUNAS: ' . $instance['colunas'];
-    echo '<br>';
-    echo 'CLASSE : ' . $instance['css_class'];
- 
-    echo $after_widget;
+
+    echo '<li class=\'span'.$instance['colunas'].'\'><div class=\'thumbnail fotodia '.$instance['css_class'].'\'>' ;
+
+    global $nggdb;
+    $galery = $nggdb->get_gallery($instance['id_galeria'], 'pid', 'DESC');
+
+    foreach ($galery as $key => $value) {
+        $foto = $galery[$key] ;
+        break;
+    }
+    echo "<img src='" . $foto->thumbURL . "' width='100%'> <h4>" . $titulo . "</h4>";
+
+    echo '</div></li>';
   }
- 
+
 }
 add_action( 'widgets_init', create_function('', 'return register_widget("FotoWidget");') );
 

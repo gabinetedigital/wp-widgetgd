@@ -1,14 +1,14 @@
 <?php
 
 class Tweetview_Widget extends WP_Widget {
-	
+
 	function Tweetview_Widget() {
-		
+
 		add_action('wp_footer', array($this,'tweetview_javascript'));
 		$widget_ops = array('classname' => 'tweetview_widget','description' => 'Widget com lista de tweet.');
-		
+
 		$this->WP_Widget('tweetview_widget', 'Gabinete Digital - Twitter', $widget_ops);
-		
+
 		if(!is_admin()) {
 			wp_enqueue_script('jquery');
 			add_action('wp_head', array($this,'tweetview_head'));
@@ -17,20 +17,20 @@ class Tweetview_Widget extends WP_Widget {
 
 	function form($instance) {
 		$instance = wp_parse_args((array) $instance, array( 'tweetview_title' => '', 'tweetview_username' => '', 'tweetview_no_tweets' => '5', 'colunas'=>'3', 'css_class' => ''));
-		
+
 		$tweetview_title = $instance['tweetview_title'];
 		$tweetview_username = $instance['tweetview_username'];
 		$tweetview_no_tweets = $instance['tweetview_no_tweets'];
 		$colunas = $instance['colunas'];
 		$css_class = $instance['css_class'];
-		
+
 		?>
-		<p><label for="<?php echo $this->get_field_id('tweetview_title'); ?>">Titulo: <input class="widefat" id="<?php echo $this->get_field_id('tweetview_title'); ?>" name="<?php echo $this->get_field_name('tweetview_title'); ?>" type="text" value="<?php echo attribute_escape($tweetview_title); ?>" /></label></p>		
+		<p><label for="<?php echo $this->get_field_id('tweetview_title'); ?>">Titulo: <input class="widefat" id="<?php echo $this->get_field_id('tweetview_title'); ?>" name="<?php echo $this->get_field_name('tweetview_title'); ?>" type="text" value="<?php echo attribute_escape($tweetview_title); ?>" /></label></p>
 		<p><label for="<?php echo $this->get_field_id('tweetview_username'); ?>">Conta do Twitter: <input class="widefat" id="<?php echo $this->get_field_id('tweetview_username'); ?>" name="<?php echo $this->get_field_name('tweetview_username'); ?>" type="text" value="<?php echo attribute_escape($tweetview_username); ?>" /></label></p>
-		<p><label for="<?php echo $this->get_field_id('tweetview_no_tweets'); ?>">Numero de tweets: <input class="widefat" id="<?php echo $this->get_field_id('tweetview_no_tweets'); ?>" name="<?php echo $this->get_field_name('tweetview_no_tweets'); ?>" type="text" value="<?php echo attribute_escape($tweetview_no_tweets); ?>" /></label></p>		
+		<p><label for="<?php echo $this->get_field_id('tweetview_no_tweets'); ?>">Numero de tweets: <input class="widefat" id="<?php echo $this->get_field_id('tweetview_no_tweets'); ?>" name="<?php echo $this->get_field_name('tweetview_no_tweets'); ?>" type="text" value="<?php echo attribute_escape($tweetview_no_tweets); ?>" /></label></p>
 		<p><label for="<?php echo $this->get_field_id('colunas'); ?>">Colunas: <input class="widefat" id="<?php echo $this->get_field_id('colunas'); ?>" name="<?php echo $this->get_field_name('colunas'); ?>" type="text" value="<?php echo attribute_escape($colunas); ?>" /></label></p>
 		<p><label for="<?php echo $this->get_field_id('css_class'); ?>">Classe CSS: <input class="widefat" id="<?php echo $this->get_field_id('css_class'); ?>" name="<?php echo $this->get_field_name('css_class'); ?>" type="text" value="<?php echo attribute_escape($css_class); ?>" /></label></p>
-		<?php 
+		<?php
 	}
 
 	function update($new_instance, $old_instance) {
@@ -46,40 +46,76 @@ class Tweetview_Widget extends WP_Widget {
 	function widget($args, $instance) {
 		extract($args);
 
-		echo $before_widget;
+	    echo "<li class='span".$instance['colunas']."'>";
+	    echo "<div class='thumbnail lasttweet ".$instance['css_class']."'>";
 		$title = (empty($instance['tweetview_title'])) ? '' : apply_filters('widget_title', $instance['tweetview_title']);
 
-		if(!empty($title)) {
-			echo $before_title . $title . $after_title;
+		$TWITTER_JSON_TIMELINE_URL =
+    		"http://api.twitter.com/1/statuses/user_timeline.rss?screen_name=".$instance['tweetview_username']."&include_rts=true&count=" . $instance['tweetview_no_tweets'];
+
+    	$doc    = new DOMDocument();
+		if($doc->load($TWITTER_JSON_TIMELINE_URL)) {
+		    // The retrieving logic goes here
+		    echo $this->tweetview_output($doc);
 		}
 
-		echo $this->tweetview_output($instance, 'widget');
-		echo $after_widget;
+		if(!empty($title)) {
+			echo "<h4>" . $title . "</h4>";
+		}
 	}
 
-	function tweetview_output($args = array(), $position) {
-		echo '<script type="text/javascript">var tweetview_username = "' . $args['tweetview_username'] . '"; var tweetview_number_of_tweets = "' . $args['tweetview_no_tweets'] . '";</script>';		
+	function tweetview_output($doc){
+		$html .= "";
+
+		foreach ($doc->getElementsByTagName('item') as $node) {
+			# fetch the title from the RSS feed.
+			# Note: 'pubDate' and 'link' are also useful
+			$tweet 		= $node->getElementsByTagName('title')->item(0)->nodeValue;
+			$pubDate	= $node->getElementsByTagName('pubDate')->item(0)->nodeValue;
+			$link		= $node->getElementsByTagName('link')->item(0)->nodeValue;
+
+			// Here you can do various formatting to your results. Have a look at the following two lines.
+
+			// OPTIONAL: the title of each tweet starts with "username: " which I want to keep
+			//$tweet = substr($tweet, stripos($tweet, ':') + 1);
+
+			// DateTime conversion
+			$pubDate = strtotime($pubDate);
+
+			$html .= "<div class='box'>";
+			$html .= "<a href=\"" . $link . "\" target=\"_new\">" ;
+			$html .= $tweet;
+			$html .= "</a>";
+			$html .= "</div>";
+
+		}
+
+		return $html;
+	}
+
+	function tweetview_output_old($args = array(), $position) {
+		echo '<script type="text/javascript">var tweetview_username = "' . $args['tweetview_username'] . '"; var tweetview_number_of_tweets = "' . $args['tweetview_no_tweets'] . '";</script>';
 		echo '<ul id="tweetview_tweetlist"><li>Carregando os tweets...</li></ul>';
 		echo '<ul><li>Siga <a href="http://twitter.com/' . $args['tweetview_username'] . '">@' . $args['tweetview_username'] . '</a> no twitter.</li></ul>';
 	}
 
 	function tweetview_head() {
-		
+
 		$array_widgetOptions = get_option('widget_tweetview-widget');
-		
+
 		if(is_array($array_widgetOptions)) {
 			foreach((array) $array_widgetOptions as $key => $value) {
 				if($value['own-css']) {
 					$var_sOwnCSS = $value['own-css'];
 					break;
-				} 
-			} 
+				}
+			}
 			if(isset($var_sOwnCSS) && $var_sOwnCSS != '') {
-				
+
 				echo "\n" . '<!-- CSS for Tweetview Widget by H.-Peter Pfeufer [http://ppfeufer.de | http://blog.ppfeufer.de] -->' . "\n" . '<style type="text/css">' . "\n" . $var_sOwnCSS . "\n" . '</style>' . "\n" . '<!-- END of CSS for Talos Tweetview Widget -->' . "\n\n";
-			} 
-		} 
-	} 
+			}
+		}
+	}
 
 	/**
 	 * Injecting the footer with the javascript
