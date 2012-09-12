@@ -82,11 +82,11 @@ class Tweetview_Widget extends WP_Widget {
 			// DateTime conversion
 			$pubDate = strtotime($pubDate);
 
-			$html .= "<div class='box'>";
 			$html .= "<a href=\"" . $link . "\" target=\"_new\">" ;
+			$html .= "<div class='box'>";
 			$html .= $tweet;
-			$html .= "</a>";
 			$html .= "</div>";
+			$html .= "</a>";
 
 		}
 

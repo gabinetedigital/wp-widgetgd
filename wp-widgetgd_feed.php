@@ -232,7 +232,7 @@ class KB_Adv_RSS extends WP_Widget {
 
 		// default format:
 		if ( empty($this->output_format) )
-			$this->output_format = '<li><a class="kbrsswidget" href="^link$" title="^description$">^title$</a></li>';
+			$this->output_format = '<a class="kbrsswidget" href="^link$" title="^description$"><li>^title$</li></a>';
 
 		$this->colunas = $instance['colunas'];
 		$this->css_class = $instance['css_class'];

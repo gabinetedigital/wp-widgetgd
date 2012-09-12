@@ -50,20 +50,22 @@ class NoticiaCompletaWidget extends WP_Widget
     extract($args, EXTR_SKIP);
 
     echo "<li class='span".$instance['colunas']."'>";
-    echo "<div class='thumbnail news1 ".$instance['css_class']."'>";
     $query = 'p=' . $instance['id_post'];
     $queryObject = new WP_Query($query);
 
     if ($queryObject->have_posts()) {
     	$queryObject->the_post();
+      echo "<a href=\"" . get_permalink() . "\">";
+      echo "<div class='thumbnail news1 ".$instance['css_class']."'>";
       echo "<img src='" . $instance['imagem'] . "' width='100%'>";
       if ($instance['chk_legenda'])
-        echo '<h4><a href="' . get_permalink() . '">' . get_the_excerpt() . '</a></h4>';
+        echo '<h4>' . get_the_excerpt() . '</a></h4>';
       else
-        echo "<h4><a href=\"" . get_permalink() . '">' . $instance['legenda'] . "</a></h4>";
+        echo "<h4><a href=\"" . get_permalink() . '">' . $instance['legenda'] . "</h4>";
+      echo "</div>";
+      echo "</a>";
 
     }
-    echo "</div>";
     echo "</li>";
   }
 

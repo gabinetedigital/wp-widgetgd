@@ -38,15 +38,59 @@ class VideoWidget extends WP_Widget
   {
     extract($args, EXTR_SKIP);
 
-    echo "<li class='span".$instance['colunas']."'>";
+    $date = new DateTime();
+    $idcontainer = $date->getTimestamp() . $instance['id_url'];
+
+    echo "<li class='vvv span".$instance['colunas']."'>";
     echo "<div class='thumbnail video ".$instance['css_class']."'>";
 
     $titulo = empty($instance['titulo']) ? ' ' : apply_filters('widget_title', $instance['titulo']);
 
     $video = wpgd_videos_get_video($instance['id_url']);
+    $sources = wpgd_videos_get_sources($instance['id_url']);
 
-    echo "<img src='" . $video['thumbnail'] . "' width='100%' title='".$video['title']."'>";
+    foreach ( $sources as $s ){
+      if( strpos( $s['format'] ,'ogg') > 0 ){
+        $url_video_ogg = $s['url'];
+      }
+      if( strpos( $s['format'] ,'mp4') > 0 ){
+        $url_video_mp4 = $s['url'];
+      }
+      if( strpos( $s['format'] ,'webm') > 0 ){
+        $url_video_webm = $s['url'];
+      }
+    }
 
+    echo "<video";
+    //echo " src=\"".$url_video_ogg."\"";
+    echo " height=\"".$video['video_height']."\"";
+    echo " id=\"container".$idcontainer."\"";
+    echo " poster=\"".$video['thumbnail']."\"";
+    echo " width=\"".$video['video_width']."\">";
+
+    echo "<source src=\"".$url_video_ogg."\" type=\"video/ogg\" />";
+    echo "<source src=\"".$url_video_mp4."\" type=\"video/mp4\" />";
+    echo "<source src=\"".$url_video_webm."\" type=\"video/webm\" />";
+    echo "Your browser does not support the video tag.";
+
+    echo "</video>";
+
+    $jscript  = "<script type=\"text/javascript\">";
+    $jscript .= "jwplayer(\"container".$idcontainer."\").setup({";
+    $jscript .= "  skin: \"/static/jw/whotube/whotube.xml\",";
+    $jscript .= "  width: '98%',";
+    $jscript .= "  modes: [";
+    $jscript .= "    { type: \"html5\" },";
+    $jscript .= "    { type: \"flash\", src: \"//static/jw/player.swf\" },";
+    $jscript .= "    { type: \"download\" }";
+    $jscript .= "  ]";
+    $jscript .= "});";
+    $jscript .= "</script>";
+
+    echo $jscript;
+
+    // echo print_r($sources[0]['url'], true);
+    //echo print_r($video, true);
     if (!empty($titulo))
       echo "<h4>" . $titulo . "</h4>";
 
