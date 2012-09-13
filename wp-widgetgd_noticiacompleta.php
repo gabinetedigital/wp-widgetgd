@@ -61,7 +61,7 @@ class NoticiaCompletaWidget extends WP_Widget
       if ($instance['chk_legenda'])
         echo '<h4>' . get_the_excerpt() . '</a></h4>';
       else
-        echo "<h4><a href=\"" . get_permalink() . '">' . $instance['legenda'] . "</h4>";
+        echo "<h4>'" . $instance['legenda'] . "</h4>";
       echo "</div>";
       echo "</a>";
 
