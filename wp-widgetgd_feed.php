@@ -10,7 +10,7 @@ define('KBRSS_MAXITEMS', 25);
 // Note that it's up to you as a responsible WPMU host to determine
 // whether this plugin is really secure enough for WPMU, though.
 // Setting true also disables the [opts:bypasssecurity] option.
-if ( $wpmu_version )
+if ( isset($wpmu_version) )
 	define('KBRSS_WPMU', true);
 else
 	define('KBRSS_WPMU', false); // change here to override and make always true

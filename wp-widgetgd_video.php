@@ -77,7 +77,7 @@ class VideoWidget extends WP_Widget
 
     $jscript  = "<script type=\"text/javascript\">";
     $jscript .= "jwplayer(\"container".$idcontainer."\").setup({";
-    $jscript .= "  skin: \"/static/jw/whotube/whotube.xml\",";
+    $jscript .= "  skin: \"/static/jw/bekle/bekle.xml\",";
     $jscript .= "  width: '98%',";
     $jscript .= "  modes: [";
     $jscript .= "    { type: \"html5\" },";
