@@ -6,7 +6,7 @@ class NoticiaCompletaWidget extends WP_Widget
 	{
 		$widget_ops = array('classname' => 'NoticiaCompletaWidget', 'description' => 'Noticia do Gabinente Digital, apenas o post da noticia em questao.' );
 		$control_ops = array( 'width' => 700, 'height' => 580 );
-		$this->WP_Widget('NoticiaCompletaWidget', 'Gabinete Digital - Noticia', $widget_ops);
+		$this->WP_Widget('NoticiaCompletaWidget', 'Gabinete Digital - Noticia Única', $widget_ops);
 	}
 
 	function form($instance)

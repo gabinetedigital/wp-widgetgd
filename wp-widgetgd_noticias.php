@@ -6,7 +6,7 @@ class NoticiasWidget extends WP_Widget
 	function NoticiasWidget()
 	{
 		$widget_ops = array('classname' => 'NoticiasWidget', 'description' => 'Noticias do Gabinete Digital, custom post type.' );
-		$this->WP_Widget('NoticiasWidget', 'Gabinete Digital - Noticias', $widget_ops);
+		$this->WP_Widget('NoticiasWidget', 'Gabinete Digital - Noticias Lista', $widget_ops);
 		//$control_ops = array( 'width' => 700, 'height' => 580 );
 		//$this->WP_Widget('NoticiasWidget', 'Gabinete Digital - Noticias', $widget_ops, $control_ops);
 	}
