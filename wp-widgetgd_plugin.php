@@ -30,6 +30,7 @@ include_once('wp-widgetgd_fotodia.php');
 include_once('wp-widgetgd_feed.php');
 include_once('wp-widgetgd_twitter.php');
 include_once('wp-widgetgd_video.php');
+include_once('wp-widgetgd_banner.php');
 
 
 ?>
