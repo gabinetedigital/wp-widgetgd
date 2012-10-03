@@ -44,6 +44,7 @@ class FotoWidget extends WP_Widget
 
     $titulo  = empty($instance['titulo']) ? ' ' : apply_filters('widget_title', $instance['titulo']);
     $galeria = $instance['id_galeria'];
+	$random  = $instance['chk_rand'];
 	 
     echo '<li class=\'span'.$instance['colunas'].'\'><div class=\'thumbnail fotodia '.$instance['css_class'].'\'>' ;
 
@@ -54,8 +55,13 @@ class FotoWidget extends WP_Widget
 	foreach($gallerylist as $gallery) {
 		$galeria = $gallery->gid;
 	}
-    $galery = $nggdb->get_gallery($galeria, 'pid', 'DESC');
-
+	
+	if(!empty($random)){
+		$galery = $nggdb->get_random_images(1, $galeria);
+	} else {
+		$galery = $nggdb->get_gallery($galeria, 'pid', 'DESC');
+	} 
+    
     foreach ($galery as $key => $value) {
         $foto = $galery[$key] ;
         break;
