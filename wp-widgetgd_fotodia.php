@@ -42,12 +42,19 @@ class FotoWidget extends WP_Widget
   {
     extract($args, EXTR_SKIP);
 
-    $titulo = empty($instance['titulo']) ? ' ' : apply_filters('widget_title', $instance['titulo']);
-
+    $titulo  = empty($instance['titulo']) ? ' ' : apply_filters('widget_title', $instance['titulo']);
+    $galeria = $instance['id_galeria'];
+	 
     echo '<li class=\'span'.$instance['colunas'].'\'><div class=\'thumbnail fotodia '.$instance['css_class'].'\'>' ;
 
     global $nggdb;
-    $galery = $nggdb->get_gallery($instance['id_galeria'], 'pid', 'DESC');
+    if(empty($galeria)){
+    	$gallerylist = $nggdb->find_all_galleries('gid', 'DESC' , TRUE, 1, 0);
+    } 
+	foreach($gallerylist as $gallery) {
+		$galeria = $gallery->gid;
+	}
+    $galery = $nggdb->get_gallery($galeria, 'pid', 'DESC');
 
     foreach ($galery as $key => $value) {
         $foto = $galery[$key] ;
