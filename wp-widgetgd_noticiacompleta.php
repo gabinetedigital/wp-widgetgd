@@ -63,7 +63,6 @@ class NoticiaCompletaWidget extends WP_Widget
 	  	if ( has_post_thumbnail() ) { 
   			echo the_post_thumbnail('src=$src');
 		} 
-	  	//echo "<img src='" . get_post_thumbnail_id(get_the_ID()) . "' width='100%'>";
 	  }
       if ($instance['chk_legenda'])
         echo '<h4>' . get_the_excerpt() . '</a></h4>';
