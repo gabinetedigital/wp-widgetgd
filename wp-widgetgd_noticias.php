@@ -47,7 +47,7 @@ class NoticiasWidget extends WP_Widget
     $args_query_post = '';
 
     echo "<li class='span".$instance['colunas']."'>";
-    echo "<div class='thumbnail rss ".$instance['css_class']."'><ul>";
+    echo "<div class='thumbnail ultimas ".$instance['css_class']."'>";
     $titulo = empty($instance['titulo']) ? ' ' : apply_filters('widget_titulo', $instance['titulo']);
     $colunas = $instance['colunas'];
     $qtd = $instance['qtd'];

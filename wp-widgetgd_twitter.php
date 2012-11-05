@@ -60,7 +60,7 @@ class Tweetview_Widget extends WP_Widget {
 		}
 
 		if(!empty($title)) {
-			echo "<h4>" . $title . "</h4>";
+			echo "<h4><a href='http://twitter.com/".$title."'>" . $title . "</a></h4>";
 		}
 	}
 

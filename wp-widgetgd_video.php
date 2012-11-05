@@ -62,9 +62,10 @@ class VideoWidget extends WP_Widget
     $jscript .= "});";
     $jscript .= "</script>";
 	
-	$txtreturn .= "<li class='vvv span".$colunas."'>";
+	$txtreturn .= "<li class='span".$colunas."'>";
 	$txtreturn .= "<div class='thumbnail video ".$css_class."'>";
-	
+	$txtreturn .= "<h4><a href='/videos/".$id_url."'>".$titulo."</a></h4>";
+
 	if(!empty($id_url)){
 		if ($pos === false) {
 			$video = wpgd_videos_get_video($id_url);
@@ -104,8 +105,8 @@ class VideoWidget extends WP_Widget
 		$txtreturn .= $embed;
 	}
 	
-    if (!empty($titulo))
-      echo "<h4>" . $titulo . "</h4>";
+    /* if (!empty($titulo)) */
+    /*   echo "<h4>" . $titulo . "</h4>"; */
 
 	$txtreturn .= "</div>";
     $txtreturn .= "</li>";
