@@ -52,13 +52,14 @@ class NoticiasWidget extends WP_Widget
     $colunas = $instance['colunas'];
     $qtd = $instance['qtd'];
     $custom_post = $instance['custom_post'];
+	$category    = $instance['categoria'];
 
     if (!empty($titulo))
       echo $before_title . $titulo . $after_title;;
 
     if (!empty($qtd))
     	$args_query_post = $args_query_post . "posts_per_page=" . $qtd;
-
+	
     if (!empty($custom_post))
     {
     	if ($args_query_post == '')
@@ -66,6 +67,10 @@ class NoticiasWidget extends WP_Widget
     	else
     		$args_query_post = $args_query_post . "&post_type=" . $custom_post;
     }
+
+	if (!empty($category))
+    	$args_query_post = $args_query_post . "category_name=" . $category;
+
     query_posts($args_query_post);
     echo "<ul>";
   if (have_posts()) :
