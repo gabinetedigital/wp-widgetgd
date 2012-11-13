@@ -66,8 +66,10 @@ class FotoWidget extends WP_Widget
         $foto = $galery[$key] ;
         break;
     }
+	
+	echo "<a href='/fotos/". $foto->slug ."'>";
     echo "<img src='" . $foto->thumbURL . "' alt='". $foto->description."' width='100%'> <h4><i class='icon-camera icon-white'></i>" . $titulo . "</h4> <h3>".$foto->description."</h3>";
-
+	echo "</a>";
     echo '</div></li>';
   }
 
