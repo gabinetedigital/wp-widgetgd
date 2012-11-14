@@ -13,11 +13,12 @@ class NoticiasWidget extends WP_Widget
 
 	function form($instance)
 	{
-		$instance = wp_parse_args( (array) $instance, array( 'titulo' => '', 'colunas' => '3', 'qtd' => '5', 'custom_post' => '', 'css_class' => '' ) );
+		$instance = wp_parse_args( (array) $instance, array( 'titulo' => '', 'colunas' => '3', 'qtd' => '5', 'custom_post' => '', 'categoria' => '', 'css_class' => '' ) );
 		$titulo = $instance['titulo'];
 		$colunas = $instance['colunas'];
 		$qtd = $instance['qtd'];
 		$custom_post = $instance['custom_post'];
+		$categoria = $instance['categoria'];
 		$css_class = $instance['css_class'];
 
 		?>
@@ -25,6 +26,7 @@ class NoticiasWidget extends WP_Widget
   		<p><label for="<?php echo $this->get_field_id('colunas'); ?>">Colunas: <input class="widefat" id="<?php echo $this->get_field_id('colunas'); ?>" name="<?php echo $this->get_field_name('colunas'); ?>" type="text" value="<?php echo attribute_escape($colunas); ?>" /></label></p>
   		<p><label for="<?php echo $this->get_field_id('qtd'); ?>">Quantidade: <input class="widefat" id="<?php echo $this->get_field_id('qtd'); ?>" name="<?php echo $this->get_field_name('qtd'); ?>" type="text" value="<?php echo attribute_escape($qtd); ?>" /></label></p>
   		<p><label for="<?php echo $this->get_field_id('custom_post'); ?>">Custom Post: <input class="widefat" id="<?php echo $this->get_field_id('custom_post'); ?>" name="<?php echo $this->get_field_name('custom_post'); ?>" type="text" value="<?php echo attribute_escape($custom_post); ?>" /></label></p>
+  		<p><label for="<?php echo $this->get_field_id('categoria'); ?>">Categoria: <input class="widefat" id="<?php echo $this->get_field_id('categoria'); ?>" name="<?php echo $this->get_field_name('categoria'); ?>" type="text" value="<?php echo attribute_escape($categoria); ?>" /></label></p>
   		<p><label for="<?php echo $this->get_field_id('css_class'); ?>">Classe CSS: <input class="widefat" id="<?php echo $this->get_field_id('css_class'); ?>" name="<?php echo $this->get_field_name('css_class'); ?>" type="text" value="<?php echo attribute_escape($css_class); ?>" /></label></p>
 <?php
   }
@@ -36,6 +38,7 @@ class NoticiasWidget extends WP_Widget
     $instance['colunas'] = $new_instance['colunas'];
     $instance['qtd'] = $new_instance['qtd'];
     $instance['custom_post'] = $new_instance['custom_post'];
+	$instance['categoria'] = $new_instance['categoria'];
     $instance['css_class'] = $new_instance['css_class'];
     return $instance;
   }
