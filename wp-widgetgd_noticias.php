@@ -83,6 +83,7 @@ class NoticiasWidget extends WP_Widget
       echo "</a>";
     endwhile;
   endif;
+  echo "<h4><a href='http://gabinetedigital.rs.gov.br/news'>ver mais notícias</a></h4>";
 		echo "</ul></div>";
 	wp_reset_query();
 
