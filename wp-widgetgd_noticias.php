@@ -72,7 +72,7 @@ class NoticiasWidget extends WP_Widget
     }
 
 	if (!empty($category))
-    	$args_query_post = $args_query_post . "category_name=" . $category;
+    	$args_query_post = $args_query_post . "&category_name=" . $category;
 
     query_posts($args_query_post);
     echo "<ul>";
