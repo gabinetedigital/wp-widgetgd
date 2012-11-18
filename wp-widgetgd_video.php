@@ -49,19 +49,29 @@ class VideoWidget extends WP_Widget
     $css_class = $instance['css_class'];
 	$idcontainer = $date->getTimestamp() . $id_url;
 	$pos = strpos($id_url, "http://");
-	
-	$jscript  = "<script type=\"text/javascript\">";
-    $jscript .= "jwplayer(\"container".$idcontainer."\").setup({";
-    $jscript .= "  skin: \"/static/jw/bekle/bekle.xml\",";
+
+    $jscript  = "<script>";
+    $jscript .= "(function($){";
+    $jscript .= "$('video').each(function(){";
+    $jscript .= "jwplayer('container$idcontainer').setup({";
+    $jscript .= "  skin: '/static/jw/bekle/bekle.xml',";
     $jscript .= "  width: '98%',";
     $jscript .= "  modes: [";
-    $jscript .= "    { type: \"html5\" },";
-    $jscript .= "    { type: \"flash\", src: \"//static/jw/player.swf\" },";
-    $jscript .= "    { type: \"download\" }";
+    $jscript .= "    { type: 'html5' },";
+    $jscript .= "    { type: 'flash', src: '//static/jw/player.swf' },";
+    $jscript .= "    { type: 'download' }";
     $jscript .= "  ]";
+    $jscript .= "}).onPlay(function (event) {";
+    $jscript .= "$('#container$idcontainer').parent().find('h4 a').fadeOut()";
+    $jscript .= "}).onPause(function (event) {";
+    $jscript .= "$('#container$idcontainer').parent().find('h4 a').fadeIn()";
+    $jscript .= "}).onComplete(function (event) {";
+    $jscript .= "$('#container$idcontainer').parent().find('h4 a').fadeIn()";
+    $jscript .= "})";
     $jscript .= "});";
+    $jscript .= "}($));";
     $jscript .= "</script>";
-	
+
 	$txtreturn .= "<li class='span".$colunas."'>";
 	$txtreturn .= "<div class='thumbnail video ".$css_class."'>";
 	$txtreturn .= "<h4><a href='/videos/".$id_url."'>".$titulo."</a></h4>";
@@ -70,7 +80,7 @@ class VideoWidget extends WP_Widget
 		if ($pos === false) {
 			$video = wpgd_videos_get_video($id_url);
     		$sources = wpgd_videos_get_sources($id_url);
-			
+
 			foreach ( $sources as $s ){
 				if( strpos( $s['format'] ,'ogg') > 0 ){
 					$url_video_ogg = $s['url'];
@@ -82,10 +92,10 @@ class VideoWidget extends WP_Widget
 					$url_video_webm = $s['url'];
 			  	}
 			}
-			
+
 			$txtreturn .= "<video";
     		$txtreturn .= "	height=\"".$video['video_height']."\"";
-    		$txtreturn .= " id=\"container".$idcontainer."\"";
+                $txtreturn .= " id='container$idcontainer'";
     		$txtreturn .= "	poster=\"".$video['thumbnail']."\"";
     		$txtreturn .= "	width=\"".$video['video_width']."\">";
 
@@ -97,20 +107,20 @@ class VideoWidget extends WP_Widget
     		$txtreturn .= "</video>";
 
     		$txtreturn .= $jscript;
-			
+
 		} else {
 			$txtreturn .= "<iframe src='$id_url' width='100%' height='100%'</iframe> ";
 		}
 	} elseif (!empty($embed)) {
 		$txtreturn .= $embed;
 	}
-	
+
     /* if (!empty($titulo)) */
     /*   echo "<h4>" . $titulo . "</h4>"; */
 
 	$txtreturn .= "</div>";
     $txtreturn .= "</li>";
-	
+
 	echo $txtreturn;
   }
 
