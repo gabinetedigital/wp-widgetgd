@@ -51,10 +51,11 @@ class FotoWidget extends WP_Widget
     global $nggdb;
     if(empty($galeria)){
     	$gallerylist = $nggdb->find_all_galleries('gid', 'DESC' , TRUE, 1, 0);
+        foreach($gallerylist as $gallery) {
+			$galeria = $gallery->gid;
+		}		
     } 
-	foreach($gallerylist as $gallery) {
-		$galeria = $gallery->gid;
-	}
+	
 	
 	if(!empty($random)){
 		$galery = $nggdb->get_random_images(1, $galeria);
