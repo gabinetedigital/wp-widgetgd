@@ -57,7 +57,7 @@ class BannerWidget extends WP_Widget
 	if(!empty($linke)){
     	echo "	<a href='" . $linke . "'>";
 	}
-    echo "	<img src='" . $instance['imagem'] . "' >";
+    echo "	<img src='" . $instance['imagem'] . "' width='100%'>";
 	if(!empty($linke)){
     	echo "	</a>";
 	}
