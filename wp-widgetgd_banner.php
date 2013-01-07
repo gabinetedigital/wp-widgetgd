@@ -4,7 +4,7 @@ class BannerWidget extends WP_Widget
 {
 	function BannerWidget()
 	{
-		$widget_ops = array('classname' => 'BannerWidget', 'description' => 'Banner do Gabinente Digital.' );		
+		$widget_ops = array('classname' => 'BannerWidget', 'description' => 'Banner do Gabinente Digital.' );
 		$this->WP_Widget('BannerWidget', 'Gabinete Digital - Banner', $widget_ops);
 	}
 
@@ -41,15 +41,15 @@ class BannerWidget extends WP_Widget
   function widget($args, $instance)
   {
     extract($args, EXTR_SKIP);
-	
+
 	$linke = $instance['link'];
-	
+
 	if (!empty($linke)){
 		$pos = strpos($linke, "http://");
 		$pos1 = strpos(substr($linke, 0,1), "/");
 		if ($pos === false && $pos1 === false) {
 			$linke = "http://".$linke;
-		} 
+		}
 	}
 
     echo "<li class='span".$instance['colunas']."'>";
@@ -57,7 +57,7 @@ class BannerWidget extends WP_Widget
 	if(!empty($linke)){
     	echo "	<a href='" . $linke . "'>";
 	}
-    echo "	<img src='" . $instance['imagem'] . "' width='100%'>";
+    echo "	<img src='" . $instance['imagem'] . "' alt='". $instance['titulo']."'>";
 	if(!empty($linke)){
     	echo "	</a>";
 	}

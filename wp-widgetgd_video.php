@@ -72,7 +72,7 @@ class VideoWidget extends WP_Widget
 			}
 
 
-      $txtreturn .= "    <video width=\"100%\" id=\"container$idcontainer\" poster=\"".$video['thumbnail']."\" controls=\"controls\" preload=\"none\">\n";
+      $txtreturn .= "    <video width=\"320\" height=\"240\" id=\"container$idcontainer\" style=\"width: 100%; height: 100%; max-width: 100%; max-height: 100%\" poster=\"".$video['thumbnail']."\" controls=\"controls\" preload=\"none\">\n";
       $txtreturn .= "      <source type=\"video/mp4\" src=\"".$url_video_mp4."\" />\n";
       $txtreturn .= "      <source type=\"video/webm\" src=\"".$url_video_webm."\" />\n";
       $txtreturn .= "      <object width=\"".$video['video_width']."\" height=\"".$video['video_height']."\" type=\"application/x-shockwave-flash\"\n";
@@ -103,7 +103,7 @@ class VideoWidget extends WP_Widget
       $txtreturn .= "    </script>\n";
 
 		} else {
-			$txtreturn .= "<iframe src='$id_url' width='100%' height='100%'</iframe> ";
+			$txtreturn .= "<iframe src='$id_url' width='100' height='100'</iframe> ";
 		}
 	} elseif (!empty($embed)) {
 		$txtreturn .= $embed;

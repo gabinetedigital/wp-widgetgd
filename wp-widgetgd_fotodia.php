@@ -45,7 +45,7 @@ class FotoWidget extends WP_Widget
     $titulo  = empty($instance['titulo']) ? ' ' : apply_filters('widget_title', $instance['titulo']);
     $galeria = $instance['id_galeria'];
 	$random  = $instance['chk_rand'];
-	 
+
     echo '<li class=\'span'.$instance['colunas'].'\'><div class=\'thumbnail fotodia '.$instance['css_class'].'\'>' ;
 
     global $nggdb;
@@ -53,25 +53,24 @@ class FotoWidget extends WP_Widget
     	$gallerylist = $nggdb->find_all_galleries('gid', 'DESC' , TRUE, 1, 0);
         foreach($gallerylist as $gallery) {
 			$galeria = $gallery->gid;
-		}		
-    } 
-	
-	
+		}
+    }
+
+
 	if(!empty($random)){
 		$galery = $nggdb->get_random_images(1, $galeria);
 	} else {
 		$galery = $nggdb->get_gallery($galeria, 'pid', 'DESC');
-	} 
-    
+	}
+
     foreach ($galery as $key => $value) {
         $foto = $galery[$key] ;
         break;
     }
-	
+
 	echo "<a href='/fotos/". $foto->slug ."'>";
-    echo "<img src='" . $foto->thumbURL . "' alt='". $foto->description."' width='100%'> <h4><i class='icon-camera icon-white'></i>" . $titulo . "</h4> <h3>".$foto->description."</h3>";
-	echo "</a>";
-    echo '</div></li>';
+    echo "<img src='" . $foto->thumbURL . "' alt='". $foto->description."'> <h4><i class='icon-camera icon-white'></i>" . $titulo . "</h4> <h3>".$foto->description."</h3>";
+    echo "</a></div></li>";
   }
 
 }
