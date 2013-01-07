@@ -62,6 +62,7 @@ class Tweetview_Widget extends WP_Widget {
 		if(!empty($title)) {
 			echo "<h4><a href='http://twitter.com/".$title."'>" . $title . "</a></h4>";
 		}
+                echo "</div></li>";
 	}
 
 	function tweetview_output($doc){
@@ -82,7 +83,7 @@ class Tweetview_Widget extends WP_Widget {
 			// DateTime conversion
 			$pubDate = strtotime($pubDate);
 
-			$html .= "<a href=\"" . $link . "\" target=\"_new\">" ;
+			$html .= "<a href=\"" . $link . "\" target=\"_blank\">" ;
 			$html .= "<div class='box'>";
 			$html .= $tweet;
 			$html .= "</div>";

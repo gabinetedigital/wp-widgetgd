@@ -55,38 +55,40 @@ class NoticiasWidget extends WP_Widget
     $colunas = $instance['colunas'];
     $qtd = $instance['qtd'];
     $custom_post = $instance['custom_post'];
-	$category    = $instance['categoria'];
+    $category    = $instance['categoria'];
 
     if (!empty($titulo))
       echo $before_title . $titulo . $after_title;;
 
     if (!empty($qtd))
-    	$args_query_post = $args_query_post . "posts_per_page=" . $qtd;
-	
-    if (!empty($custom_post))
-    {
-    	if ($args_query_post == '')
-    		$args_query_post = $args_query_post . "post_type=" . $custom_post;
-    	else
-    		$args_query_post = $args_query_post . "&post_type=" . $custom_post;
-    }
+      $args_query_post = $args_query_post . "posts_per_page=" . $qtd;
 
-	if (!empty($category))
-    	$args_query_post = $args_query_post . "&category_name=" . $category;
+    if (!empty($custom_post))
+      {
+    	if ($args_query_post == '')
+          $args_query_post = $args_query_post . "post_type=" . $custom_post;
+    	else
+          $args_query_post = $args_query_post . "&post_type=" . $custom_post;
+      }
+
+    if (!empty($category))
+      $args_query_post = $args_query_post . "&category_name=" . $category;
 
     query_posts($args_query_post);
     echo "<ul>";
-  if (have_posts()) :
-    while (have_posts()) : the_post();
-      echo "<a href='".get_permalink()."'>";
-			echo "<li>". get_the_title() . "</li>";
-      echo "</a>";
+    if (have_posts()) :
+      while (have_posts()) : the_post();
+    echo "<li>";
+    echo "<a href='".get_permalink()."'>";
+    echo get_the_title();
+    echo "</a>";
+    echo "</li>";
     endwhile;
-  endif;
-  echo "<h4><a href='http://gabinetedigital.rs.gov.br/news'>ver mais notícias</a></h4>";
-		echo "</ul></div>";
-	wp_reset_query();
-
+    endif;
+    echo "</ul>";
+    echo "<a href='http://gabinetedigital.rs.gov.br/news'><h4>ver mais notícias</h4></a>";
+    wp_reset_query();
+    echo "</div>";
     echo "</li>";
   }
 

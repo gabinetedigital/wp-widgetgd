@@ -58,11 +58,11 @@ class NoticiaCompletaWidget extends WP_Widget
       echo "<a href=\"" . get_permalink() . "\">";
       echo "<div class='thumbnail news1 ".$instance['css_class']."'>";
 	  if(!empty($instance['imagem'])){
-          echo "<img src='" . $instance['imagem'] . "' width='100%'>";
+          echo "<img src='" . $instance['imagem'] . "' alt='". $instance['legenda'] ."'>";
 	  } else {
-	  	if ( has_post_thumbnail() ) { 
+            if ( has_post_thumbnail() ) {
   			echo the_post_thumbnail('src=$src');
-		} 
+		}
 	  }
       if ($instance['chk_legenda'])
         echo '<h4>' . get_the_excerpt() . '</a></h4>';
