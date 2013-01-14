@@ -50,31 +50,9 @@ class VideoWidget extends WP_Widget
 	$idcontainer = $date->getTimestamp() . $id_url;
 	$pos = strpos($id_url, "http://");
 
-    $jscript  = "<script>";
-    $jscript .= "(function($){";
-    $jscript .= "$('video').each(function(){";
-    $jscript .= "jwplayer('container$idcontainer').setup({";
-    $jscript .= "  skin: '/static/jw/bekle/bekle.xml',";
-    $jscript .= "  width: '98%',";
-    $jscript .= "  modes: [";
-    $jscript .= "    { type: 'html5' },";
-    $jscript .= "    { type: 'flash', src: '//static/jw/player.swf' },";
-    $jscript .= "    { type: 'download' }";
-    $jscript .= "  ]";
-    $jscript .= "}).onPlay(function (event) {";
-    $jscript .= "$('#container$idcontainer').parent().find('h4 a').fadeOut()";
-    $jscript .= "}).onPause(function (event) {";
-    $jscript .= "$('#container$idcontainer').parent().find('h4 a').fadeIn()";
-    $jscript .= "}).onComplete(function (event) {";
-    $jscript .= "$('#container$idcontainer').parent().find('h4 a').fadeIn()";
-    $jscript .= "})";
-    $jscript .= "});";
-    $jscript .= "}($));";
-    $jscript .= "</script>";
-
 	$txtreturn .= "<li class='span".$colunas."'>";
 	$txtreturn .= "<div class='thumbnail video ".$css_class."'>";
-	$txtreturn .= "<h4><a href='/videos/".$id_url."'>".$titulo."</a></h4>";
+	$txtreturn .= "<h4><a id=\"title-$idcontainer\" href='/videos/".$id_url."'>".$titulo."</a></h4>";
 
 	if(!empty($id_url)){
 		if ($pos === false) {
@@ -93,20 +71,35 @@ class VideoWidget extends WP_Widget
 			  	}
 			}
 
-			$txtreturn .= "<video";
-    		$txtreturn .= "	height=\"".$video['video_height']."\"";
-                $txtreturn .= " id='container$idcontainer'";
-    		$txtreturn .= "	poster=\"".$video['thumbnail']."\"";
-    		$txtreturn .= "	width=\"".$video['video_width']."\">";
 
-    		$txtreturn .= " <source src=\"".$url_video_ogg."\" type=\"video/ogg\" />";
-    		$txtreturn .= "<source src=\"".$url_video_mp4."\" type=\"video/mp4\" />";
-    		$txtreturn .= "<source src=\"".$url_video_webm."\" type=\"video/webm\" />";
-    		$txtreturn .= "Your browser does not support the video tag.";
-
-    		$txtreturn .= "</video>";
-
-    		$txtreturn .= $jscript;
+      $txtreturn .= "    <video width=\"100%\" id=\"container$idcontainer\" poster=\"".$video['thumbnail']."\" controls=\"controls\" preload=\"none\">\n";
+      $txtreturn .= "      <source type=\"video/mp4\" src=\"".$url_video_mp4."\" />\n";
+      $txtreturn .= "      <source type=\"video/webm\" src=\"".$url_video_webm."\" />\n";
+      $txtreturn .= "      <object width=\"".$video['video_width']."\" height=\"".$video['video_height']."\" type=\"application/x-shockwave-flash\"\n";
+      $txtreturn .= "        data=\"static/me/build/flashmediaelement.swf\">\n";
+      $txtreturn .= "        <param name=\"movie\" value=\"static/me/build/flashmediaelement.swf\" /> \n";
+      $txtreturn .= "        <param name=\"flashvars\" value=\"controls=true&amp;file=".$url_video_mp4."\" /> \n";
+      $txtreturn .= "        <img src=\"".$video['thumbnail']."\" width=\"".$video['video_width']."\" height=\"".$video['video_height']."\" alt=\"Here we are\" \n";
+      $txtreturn .= "          title=\"No video playback capabilities\" />\n";
+      $txtreturn .= "      </object>\n";
+      $txtreturn .= "    </video>\n";
+      $txtreturn .= "    <script type=\"text/javascript\">\n";
+      $txtreturn .= "      $('#container$idcontainer').mediaelementplayer({\n";
+      $txtreturn .= "        enableAutosize: false,\n";
+      $txtreturn .= "        enableKeyboard: true,\n";
+      $txtreturn .= "        success: function(media, node, player) { ; \n";
+      $txtreturn .= "           media.addEventListener('play', function(e) {\n";
+      $txtreturn .= "             //$('#title-$idcontainer').fadeOut();\n";
+      $txtreturn .= "           },false);\n";
+      $txtreturn .= "           media.addEventListener('pause', function(e) {\n";
+      $txtreturn .= "             //$('#title-$idcontainer').fadeIn();\n";
+      $txtreturn .= "           });\n";
+      $txtreturn .= "           media.addEventListener('ended', function(e) {\n";
+      $txtreturn .= "             //$('#title-$idcontainer').fadeIn();\n";
+      $txtreturn .= "           });\n";
+      $txtreturn .= "        }\n";
+      $txtreturn .= "      });\n";
+      $txtreturn .= "    </script>\n";
 
 		} else {
 			$txtreturn .= "<iframe src='$id_url' width='100%' height='100%'</iframe> ";
