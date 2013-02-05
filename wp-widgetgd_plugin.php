@@ -32,5 +32,47 @@ include_once('wp-widgetgd_twitter.php');
 include_once('wp-widgetgd_video.php');
 include_once('wp-widgetgd_banner.php');
 
+add_action( 'admin_menu', 'wp_widgetgd_options_menu' );
+//call register settings function
+add_action( 'admin_init', 'register_mysettings' );
 
+function wp_widgetgd_options_menu() {
+  add_options_page( 'WP-WidgetGD Options', 'WP-WidgetGD', 'manage_options', 'wp-widgetsgd', 'wp_widgetgd_options' );
+}
+
+function register_mysettings() {
+  //register our settings
+  register_setting( 'wp-widgets-options-group', 'thumbor_url' );
+  register_setting( 'wp-widgets-options-group', 'thumbor_skey' );
+}
+
+function wp_widgetgd_options() {
+  if ( !current_user_can( 'manage_options' ) )  {
+    wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
+  }
 ?>
+
+	<div class="wrap">
+	<h2>WP-Widget GD Options</h2>
+	<p>Configurações disponíveis para o plugin WP Widget do Gabinete Digital. Altere conforme sua necessidade e clique em 'Salvar alterações'.</p>
+
+	<form method="post" action="options.php">
+	    <?php settings_fields( 'wp-widgets-options-group' ); ?>
+	    <?php do_settings_fields( 'wp-widgets-options-group' ); ?>
+	    <table class="form-table">
+	        <tr valign="top">
+	        	<th scope="row">Thumbor Url</th>
+	        	<td><input type="text" name="thumbor_url" value="<?php echo get_option('thumbor_url'); ?>" style="width:500px;" /></td>
+	        </tr>
+	        <tr valign="top">
+	        	<th scope="row">Thumbor Secret Key</th>
+	        	<td><input type="text" name="thumbor_skey" value="<?php echo get_option('thumbor_skey'); ?>" style="width:500px;" /></td>
+	        </tr>
+	    </table>
+
+	    <?php submit_button(); ?>
+
+	</form>
+	</div>
+
+<?php } ?>

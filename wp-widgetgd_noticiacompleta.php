@@ -1,5 +1,7 @@
 <?php
 
+include_once('wp-widgetgd_func.php');
+
 class NoticiaCompletaWidget extends WP_Widget
 {
 	function NoticiaCompletaWidget()
@@ -56,9 +58,10 @@ class NoticiaCompletaWidget extends WP_Widget
     if ($queryObject->have_posts()) {
     	$queryObject->the_post();
       echo "<a href=\"" . get_permalink() . "\">";
-      echo "<div class='thumbnail news1 ".$instance['css_class']."'>";
+      $idd = str_replace(' ','',str_replace('.','',microtime()));
+      echo "<div id=\"".$idd."\" class='thumbnail news1 ".$instance['css_class']."'>";
 	  if(!empty($instance['imagem'])){
-          echo "<img src='" . $instance['imagem'] . "' alt='". $instance['legenda'] ."'>";
+       echo "<img src='" .  thumbor($instance['imagem'])  . "' data-image=\"".str_replace('http://','',$instance['imagem'])."\" alt='". $instance['legenda'] ."'>";
 	  } else {
             if ( has_post_thumbnail() ) {
   			echo the_post_thumbnail('src=$src');
@@ -77,6 +80,5 @@ class NoticiaCompletaWidget extends WP_Widget
 
 }
 add_action( 'widgets_init', create_function('', 'return register_widget("NoticiaCompletaWidget");') );
-
 
 ?>
