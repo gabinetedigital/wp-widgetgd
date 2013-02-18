@@ -1,8 +1,8 @@
 <?php
 
-function thumbor($imagem)
+function thumbor($imagem, $size)
 {
-       $cmd = "fit-in/500x500/smart"; //transformation command
+       $cmd = "fit-in/$size/center/middle/smart"; //transformation command
 
        $path = str_replace('http://','',$imagem); //original image path
 
