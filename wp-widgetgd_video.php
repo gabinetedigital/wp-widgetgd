@@ -76,8 +76,8 @@ class VideoWidget extends WP_Widget
       $txtreturn .= "      <source type=\"video/mp4\" src=\"".$url_video_mp4."\" />\n";
       $txtreturn .= "      <source type=\"video/webm\" src=\"".$url_video_webm."\" />\n";
       $txtreturn .= "      <object width=\"".$video['video_width']."\" height=\"".$video['video_height']."\" type=\"application/x-shockwave-flash\"\n";
-      $txtreturn .= "        data=\"static/me/build/flashmediaelement.swf\">\n";
-      $txtreturn .= "        <param name=\"movie\" value=\"static/me/build/flashmediaelement.swf\" /> \n";
+      $txtreturn .= "        data=\"/static/me/build/flashmediaelement.swf\">\n";
+      $txtreturn .= "        <param name=\"movie\" value=\"/static/me/build/flashmediaelement.swf\" /> \n";
       $txtreturn .= "        <param name=\"flashvars\" value=\"controls=true&amp;file=".$url_video_mp4."\" /> \n";
       $txtreturn .= "        <img src=\"".$video['thumbnail']."\" width=\"".$video['video_width']."\" height=\"".$video['video_height']."\" alt=\"Here we are\" \n";
       $txtreturn .= "          title=\"No video playback capabilities\" />\n";
