@@ -24,6 +24,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+include_once('TwitterAPIExchange.php');
 include_once('wp-widgetgd_noticias.php');
 include_once('wp-widgetgd_noticiacompleta.php');
 include_once('wp-widgetgd_fotodia.php');

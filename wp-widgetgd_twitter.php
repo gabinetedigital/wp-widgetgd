@@ -50,13 +50,44 @@ class Tweetview_Widget extends WP_Widget {
 	    echo "<div class='thumbnail lasttweet ".$instance['css_class']."'>";
 		$title = (empty($instance['tweetview_title'])) ? '' : apply_filters('widget_title', $instance['tweetview_title']);
 
-		$TWITTER_JSON_TIMELINE_URL =
-    		"http://api.twitter.com/1/statuses/user_timeline.rss?screen_name=".$instance['tweetview_username']."&include_rts=true&count=" . $instance['tweetview_no_tweets'];
 
-    	$doc    = new DOMDocument();
-		if($doc->load($TWITTER_JSON_TIMELINE_URL)) {
+		$url = 'https://api.twitter.com/1.1/statuses/user_timeline.json';
+		$getfield = "?screen_name=".$instance['tweetview_username']."&include_rts=true&count=" . $instance['tweetview_no_tweets'];
+		// $getfield = '?screen_name=j7mbo';
+		$requestMethod = 'GET';
+
+		$twitter_consumer_key = get_option("gd_twitter_consumer_key");
+        $twitter_consumer_secret = get_option("gd_twitter_consumer_secret");
+        $twitter_access_token = get_option("gd_twitter_access_token");
+    	$twitter_access_token_secret = get_option("gd_twitter_access_token_secret");
+    	error_log("Com as configurações do WP ============================================================= >");
+		$settings = array(
+		    'oauth_access_token' => $twitter_access_token,
+		    'oauth_access_token_secret' => $twitter_access_token_secret,
+		    'consumer_key' => $twitter_consumer_key,
+		    'consumer_secret' => $twitter_consumer_secret
+		);
+		// $settings = array(
+		//     'oauth_access_token' => "252530217-o7nvCnfDssJp0MN3SLPwkJWenx2POIM9l4EXe05P",
+		//     'oauth_access_token_secret' => "PsLckKAAgwKm3SN6bMI56bNMEW5B9r5dq0VrF7Jif8",
+		//     'consumer_key' => "ScQDqmWRfhLh2Mu2ZqIolw",
+		//     'consumer_secret' => "jCRJQQDrvXWg3Mhmr1VQLJ3x4ACJBjgXYZW6xmdbI"
+		// );
+		$twitter = new TwitterAPIExchange($settings);
+		$response = $twitter->setGetfield($getfield)
+		                    ->buildOauth($url, $requestMethod)
+		                    ->performRequest();
+		// error_log("TWITTSSSSSSSSS");
+		// error_log(print_r(json_decode($response),true));
+
+		// $TWITTER_JSON_TIMELINE_URL =
+  //   		"http://api.twitter.com/1.1/statuses/user_timeline.rss?screen_name=".$instance['tweetview_username']."&include_rts=true&count=" . $instance['tweetview_no_tweets'];
+
+    	// $doc    = new DOMDocument();
+		// if($doc->load($TWITTER_JSON_TIMELINE_URL)) {
+		if( $response != null ){
 		    // The retrieving logic goes here
-		    echo $this->tweetview_output($doc);
+		    echo $this->tweetview_output($response);
 		}
 
 		if(!empty($title)) {
@@ -65,15 +96,15 @@ class Tweetview_Widget extends WP_Widget {
                 echo "</div></li>";
 	}
 
-	function tweetview_output($doc){
-		$html .= "";
+	function tweetview_output($response){
+		$html = "";
 
-		foreach ($doc->getElementsByTagName('item') as $node) {
+		foreach (json_decode($response) as $key => $node) {
 			# fetch the title from the RSS feed.
 			# Note: 'pubDate' and 'link' are also useful
-			$tweet 		= $node->getElementsByTagName('title')->item(0)->nodeValue;
-			$pubDate	= $node->getElementsByTagName('pubDate')->item(0)->nodeValue;
-			$link		= $node->getElementsByTagName('link')->item(0)->nodeValue;
+			$tweet 		= $node->{'text'};
+			$pubDate	= $node->{'created_at'};
+			$link		= "http://twitter.com/".$node->{'user'}->{'screen_name'}."/status/".$node->{'id'};
 
 			// Here you can do various formatting to your results. Have a look at the following two lines.
 
