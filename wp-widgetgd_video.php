@@ -47,7 +47,7 @@ class VideoWidget extends WP_Widget
     $id_url  = $instance['id_url'];
 	$embed   = $instance['embed'];
     $css_class = $instance['css_class'];
-	$idcontainer = $date->getTimestamp() . $id_url;
+	$idcontainer = rand($id_url,10000) . $id_url;
 	$pos = strpos($id_url, "http://");
 
 	$txtreturn .= "<li class='span".$colunas."'>";
@@ -83,7 +83,7 @@ class VideoWidget extends WP_Widget
       $txtreturn .= "          title=\"No video playback capabilities\" />\n";
       $txtreturn .= "      </object>\n";
       $txtreturn .= "    </video>\n";
-      $txtreturn .= "    <script type=\"text/javascript\">\n";
+      $txtreturn .= "    <script type=\"text/javascript\">\n$(function(){";
       $txtreturn .= "      $('#container$idcontainer').mediaelementplayer({\n";
       $txtreturn .= "        enableAutosize: false,\n";
       $txtreturn .= "        enableKeyboard: true,\n";
@@ -99,7 +99,7 @@ class VideoWidget extends WP_Widget
       $txtreturn .= "             $('#title-$idcontainer').fadeIn();\n";
       $txtreturn .= "           });\n";
       $txtreturn .= "        }\n";
-      $txtreturn .= "      });\n";
+      $txtreturn .= "      });});\n";
       $txtreturn .= "    </script>\n";
 
 		} else {
