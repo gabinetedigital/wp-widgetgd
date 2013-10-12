@@ -14,7 +14,7 @@ class FotoWidget extends WP_Widget
 		$titulo = $instance['titulo'];
 		$id_galeria = $instance['id_galeria'];
 		$chk_rand = $instance['chk_rand'];
-    $chk_legenda_externa = $instance['chk_legenda_externa'];
+    	$chk_legenda_externa = $instance['chk_legenda_externa'];
 		$colunas = $instance['colunas'];
 		$css_class = $instance['css_class'];
 
