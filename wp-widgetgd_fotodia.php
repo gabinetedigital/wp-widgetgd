@@ -18,13 +18,31 @@ class FotoWidget extends WP_Widget
 		$colunas = $instance['colunas'];
 		$css_class = $instance['css_class'];
 
+		global $nggdb;
+		$id_galeria_selec = attribute_escape($id_galeria);
+    	$gallerylist = $nggdb->find_all_galleries('name', 'ASC' , TRUE, 0, 0);
+
 		?>
 
 		<p><label for="<?php echo $this->get_field_id('titulo'); ?>">Titulo: <input class="widefat" id="<?php echo $this->get_field_id('titulo'); ?>" name="<?php echo $this->get_field_name('titulo'); ?>" type="text" value="<?php echo attribute_escape($titulo); ?>" /></label></p>
-  		<p><label for="<?php echo $this->get_field_id('id_galeria'); ?>">ID Galeria: <input class="widefat" id="<?php echo $this->get_field_id('id_galeria'); ?>" name="<?php echo $this->get_field_name('id_galeria'); ?>" type="text" value="<?php echo attribute_escape($id_galeria); ?>" /></label></p>
+  		<p>
+  			<label for="<?php echo $this->get_field_id('id_galeria'); ?>">ID_Galeria
+				<select name="<?php echo $this->get_field_name('id_galeria'); ?>" id="<?php echo $this->get_field_id('id_galeria'); ?>" class="widefat">
+  					<option value="">Selecione uma Galeria</option>
+  					<?php
+  						foreach($gallerylist as $gallery) {
+  							if ($id_galeria_selec == $gallery->gid)
+  								echo "<option value='$gallery->gid' selected=selected>$gallery->name</option>";
+							else
+								echo "<option value='$gallery->gid'>$gallery->name</option>";
+						}
+					?>
+				</select>
+			</label>
+		</p>
   		<p><label for="<?php echo $this->get_field_id('chk_rand'); ?>"><input type="checkbox" name="<?php echo $this->get_field_name('chk_rand'); ?>" id="<?php echo $this->get_field_id('chk_rand'); ?>" value="1" <?php if ( $chk_rand ) { echo 'checked="checked"'; } ?> />&nbsp;Foto randomica</label></p>
   		<p><input type="checkbox" name="<?php echo $this->get_field_name('chk_legenda_externa'); ?>" id="<?php echo $this->get_field_id('chk_legenda_externa'); ?>" value="1" <?php if ( $chk_legenda_externa ) { echo 'checked="checked"'; } ?> /><label for="<?php echo $this->get_field_id('chk_legenda_externa'); ?>">&nbsp;Legenda Externa </label></p>
-      <p><label for="<?php echo $this->get_field_id('colunas'); ?>">Colunas: <input class="widefat" id="<?php echo $this->get_field_id('colunas'); ?>" name="<?php echo $this->get_field_name('colunas'); ?>" type="text" value="<?php echo attribute_escape($colunas); ?>" /></label></p>
+      	<p><label for="<?php echo $this->get_field_id('colunas'); ?>">Colunas: <input class="widefat" id="<?php echo $this->get_field_id('colunas'); ?>" name="<?php echo $this->get_field_name('colunas'); ?>" type="text" value="<?php echo attribute_escape($colunas); ?>" /></label></p>
   		<p><label for="<?php echo $this->get_field_id('css_class'); ?>">Classe CSS: <input class="widefat" id="<?php echo $this->get_field_id('css_class'); ?>" name="<?php echo $this->get_field_name('css_class'); ?>" type="text" value="<?php echo attribute_escape($css_class); ?>" /></label></p>
 <?php
   }
