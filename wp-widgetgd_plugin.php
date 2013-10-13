@@ -32,6 +32,11 @@ include_once('wp-widgetgd_feed.php');
 include_once('wp-widgetgd_twitter.php');
 include_once('wp-widgetgd_video.php');
 include_once('wp-widgetgd_banner.php');
-
+include_once('wp-widgetgd_twitter2.php');
+include_once('wp-widgetgd_facebook.php');
+include_once('wp-widgetgd_texto.php');
+include_once('wp-widgetgd_obras.php');
+include_once('wp-widgetgd_instagram.php');
+include_once('wp-widgetgd_videodestaque.php');
 
 ?>
