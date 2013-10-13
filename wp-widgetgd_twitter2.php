@@ -48,10 +48,13 @@ class TwitterGD extends WP_Widget
     $twitter_user   = $instance['twitter_user'];
     $colunas = $instance['colunas'];
     $css_class = $instance['css_class'];    
-
-    $txtreturn = '<a class="twitter-timeline"  href="https://twitter.com/felipempasquali"  data-widget-id="'.$widget_id.'">Tweets de @'.$twitter_user.'</a>';
-    $txtreturn.= '<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?\'http\':\'https\';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>';
-
+	
+	$txtreturn = '';
+	$txtreturn .= "<li class='span".$instance['colunas']."'>";
+    $txtreturn .= '<a class="twitter-timeline"  href="https://twitter.com/felipempasquali"  data-widget-id="'.$widget_id.'">Tweets de @'.$twitter_user.'</a>';
+    $txtreturn .= '<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?\'http\':\'https\';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>';
+	$txtreturn .= "</li>";
+	
     echo $txtreturn;    
 
   }
