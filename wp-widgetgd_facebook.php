@@ -81,8 +81,9 @@ class FacebookGD extends WP_Widget
     $colunas = $instance['colunas'];
     $css_class = $instance['css_class'];    
 
-    $txtreturn = '<div id="fb-root"></div><script>(function(d, s, id) {var js, fjs = d.getElementsByTagName(s)[0]; if (d.getElementById(id)) return; js = d.createElement(s); js.id = id; js.src = "//connect.facebook.net/pt_BR/all.js#xfbml=1"; fjs.parentNode.insertBefore(js, fjs);}(document, \'script\', \'facebook-jssdk\'));</script>';
-
+	$txtreturn = "";
+	$txtreturn .= "<li class='span".$instance['colunas']."'>";
+    $txtreturn .= '<div id="fb-root"></div><script>(function(d, s, id) {var js, fjs = d.getElementsByTagName(s)[0]; if (d.getElementById(id)) return; js = d.createElement(s); js.id = id; js.src = "//connect.facebook.net/pt_BR/all.js#xfbml=1"; fjs.parentNode.insertBefore(js, fjs);}(document, \'script\', \'facebook-jssdk\'));</script>';
     $txtreturn .= '<div class="fb-like-box" ';
     $txtreturn .= ' data-href="https://www.facebook.com/'.$fanpage.'"';
     if($largura != ''){$txtreturn .= ' data-width="'.$largura.'"';}
@@ -93,7 +94,8 @@ class FacebookGD extends WP_Widget
     if($posts){$txtreturn .= ' data-stream="true"';}        else{$txtreturn .= ' data-stream="false"';}
     if($border){$txtreturn .= ' data-show-border="true"';}  else{$txtreturn .= ' data-show-border="false"';}
     $txtreturn .= '></div>';
-
+	$txtreturn .= "</li>";
+	
     echo $txtreturn;    
 
   }
