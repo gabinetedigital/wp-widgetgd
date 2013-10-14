@@ -65,8 +65,10 @@ class VideoDestaqueWidget extends WP_Widget
     $txtreturn .= "</div>";
     $txtreturn .= "<div class='wpvideos ".$css_class."'>";
 	foreach ( $posts as $p ) {
-		$txtreturn .= "";
-		
+		$txtreturn .= "<a href='/videos/".$p->id."'>";
+		$txtreturn .= "    <img src='".$p->thumbnail."' width='100px' />";
+		$txtreturn .= "</a>";
+          
 	}
     $txtreturn .= "</div>";
     $txtreturn .= "</li>";
