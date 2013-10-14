@@ -50,8 +50,6 @@ class TextoSimplesWidget extends WP_Widget
   	$txtreturn .= "<li class='span".$colunas."'>";
   	$txtreturn .= "<div class='texto_simples ".$css_class."'>";
   	$txtreturn .= "<h4>".$titulo."</h4>";
-    $txtreturn .= "</div>";
-    $txtreturn .= "<div class='texto_simples ".$css_class."'>";
     $txtreturn .= "<h3>".$texto."</h3>";
     $txtreturn .= "</div>";
     $txtreturn .= "</li>";
