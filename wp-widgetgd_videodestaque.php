@@ -5,10 +5,8 @@ class VideoDestaqueWidget extends WP_Widget
 	function VideoDestaqueWidget()
 	{
 		$widget_ops = array('classname' => 'VideoDestaqueWidget', 'description' => 'Video Destaque Gabinete Digital.' );
-    $this->WP_Widget('VideoDestaqueWidget', 'Gabinete Digital - Video Destaque', $widget_ops);
-    //$widget_controls = array( 'width' => 600 );
-		//$this->WP_Widget('ObrasWidget', 'Gabinete Digital - De Olho nas Obras', $widget_ops, $widget_controls);
-    
+		$this->WP_Widget('VideoDestaqueWidget', 'Gabinete Digital - Video Destaque', $widget_ops);
+
 	}
 
 	function form($instance)
@@ -17,14 +15,14 @@ class VideoDestaqueWidget extends WP_Widget
 		$titulo = $instance['titulo'];    
 		$colunas = $instance['colunas'];		
 		$css_class = $instance['css_class'];
-    $qtd_video = $instance['qtd_video'];
-    $chk_legenda_externa = $instance['chk_legenda_externa'];
+		$qtd_video = $instance['qtd_video'];
+		$chk_legenda_externa = $instance['chk_legenda_externa'];
 
 		?>
-  		<p><label for="<?php echo $this->get_field_id('titulo'); ?>">Titulo: <input class="widefat" id="<?php echo $this->get_field_id('titulo'); ?>" name="<?php echo $this->get_field_name('titulo'); ?>" type="text" value="<?php echo attribute_escape($titulo); ?>" /></label></p>
-      <p><label for="<?php echo $this->get_field_id('qtd_video'); ?>">Quantidade de Videos: <input class="widefat" id="<?php echo $this->get_field_id('qtd_video'); ?>" name="<?php echo $this->get_field_name('qtd_video'); ?>" type="text" value="<?php echo attribute_escape($qtd_video); ?>" /></label></p>
-      <p><input type="checkbox" name="<?php echo $this->get_field_name('chk_legenda_externa'); ?>" id="<?php echo $this->get_field_id('chk_legenda_externa'); ?>" value="1" <?php if ( $chk_legenda_externa ) { echo 'checked="checked"'; } ?> /><label for="<?php echo $this->get_field_id('chk_legenda_externa'); ?>">&nbsp;Legenda Externa </label></p>
-      <p><label for="<?php echo $this->get_field_id('colunas'); ?>">Colunas: <input class="widefat" id="<?php echo $this->get_field_id('colunas'); ?>" name="<?php echo $this->get_field_name('colunas'); ?>" type="text" value="<?php echo attribute_escape($colunas); ?>" /></label></p>
+		<p><label for="<?php echo $this->get_field_id('titulo'); ?>">Titulo: <input class="widefat" id="<?php echo $this->get_field_id('titulo'); ?>" name="<?php echo $this->get_field_name('titulo'); ?>" type="text" value="<?php echo attribute_escape($titulo); ?>" /></label></p>
+		<p><label for="<?php echo $this->get_field_id('qtd_video'); ?>">Quantidade de Videos: <input class="widefat" id="<?php echo $this->get_field_id('qtd_video'); ?>" name="<?php echo $this->get_field_name('qtd_video'); ?>" type="text" value="<?php echo attribute_escape($qtd_video); ?>" /></label></p>
+		<p><input type="checkbox" name="<?php echo $this->get_field_name('chk_legenda_externa'); ?>" id="<?php echo $this->get_field_id('chk_legenda_externa'); ?>" value="1" <?php if ( $chk_legenda_externa ) { echo 'checked="checked"'; } ?> /><label for="<?php echo $this->get_field_id('chk_legenda_externa'); ?>">&nbsp;Legenda Externa </label></p>
+		<p><label for="<?php echo $this->get_field_id('colunas'); ?>">Colunas: <input class="widefat" id="<?php echo $this->get_field_id('colunas'); ?>" name="<?php echo $this->get_field_name('colunas'); ?>" type="text" value="<?php echo attribute_escape($colunas); ?>" /></label></p>
   		<p><label for="<?php echo $this->get_field_id('css_class'); ?>">Classe CSS: <input class="widefat" id="<?php echo $this->get_field_id('css_class'); ?>" name="<?php echo $this->get_field_name('css_class'); ?>" type="text" value="<?php echo attribute_escape($css_class); ?>" /></label></p>
 <?php
   }
@@ -43,19 +41,33 @@ class VideoDestaqueWidget extends WP_Widget
   function widget($args, $instance)
   {
     extract($args, EXTR_SKIP);
+	
+	global $wpdb;
 
   	$titulo = empty($instance['titulo']) ? ' ' : apply_filters('widget_title', $instance['titulo']);
     $colunas = $instance['colunas'];    
     $css_class = $instance['css_class'];
     $qtd_video = $instance['qtd_video'];
   	
+	$posts = $wpdb->get_results(
+								"
+                				select 	* 
+                				from 	wp_wpgd_admin_videos 
+            					where 	highlight = 1 
+            					order 	by date desc limit 0,".$qtd_video."
+            					"
+						);
+
     $txtreturn = "";
   	$txtreturn .= "<li class='span".$colunas."'>";
   	$txtreturn .= "<div class='texto_simples ".$css_class."'>";
   	$txtreturn .= "<h4>".$titulo."</h4>";
     $txtreturn .= "</div>";
-    $txtreturn .= "<div class='texto_simples ".$css_class."'>";
-    $txtreturn .= "<h3>".$qtd_video."</h3>";
+    $txtreturn .= "<div class='wpvideos ".$css_class."'>";
+	foreach ( $posts as $p ) {
+		$txtreturn .= "";
+		
+	}
     $txtreturn .= "</div>";
     $txtreturn .= "</li>";
 
