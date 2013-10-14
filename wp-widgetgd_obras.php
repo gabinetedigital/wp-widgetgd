@@ -6,8 +6,6 @@ class ObrasWidget extends WP_Widget
 	{
 		$widget_ops = array('classname' => 'ObrasWidget', 'description' => 'De Olho nas Obras Gabinete Digital.' );
     $this->WP_Widget('ObrasWidget', 'Gabinete Digital - De Olho nas Obras', $widget_ops);
-    //$widget_controls = array( 'width' => 600 );
-		//$this->WP_Widget('ObrasWidget', 'Gabinete Digital - De Olho nas Obras', $widget_ops, $widget_controls);
     
 	}
 
@@ -17,15 +15,43 @@ class ObrasWidget extends WP_Widget
 		$titulo = $instance['titulo'];    
 		$colunas = $instance['colunas'];		
 		$css_class = $instance['css_class'];
-    $id_obras = $instance['id_obras'];
-    $chk_imagem = $instance['chk_imagem'];
-    $chk_titulo = $instance['chk_titulo'];
-    $chk_descricao = $instance['chk_descricao'];
+    	$id_obras = $instance['id_obras'];
+    	$chk_imagem = $instance['chk_imagem'];
+    	$chk_titulo = $instance['chk_titulo'];
+    	$chk_descricao = $instance['chk_descricao'];
+		
+		wp_reset_query();
+		query_posts( array( 'post_type' => 'gdobra',
+							'post_status' => 'publish', 
+							'post_parent' => '0', 
+							'orderby' => 'title', 
+							'order' => 'ASC' ) );
+		
+		$id_obras_selec = attribute_escape($id_obras);
 
 		?>
   		<p><label for="<?php echo $this->get_field_id('titulo'); ?>">Título: <input class="widefat" id="<?php echo $this->get_field_id('titulo'); ?>" name="<?php echo $this->get_field_name('titulo'); ?>" type="text" value="<?php echo attribute_escape($titulo); ?>" /></label></p>
       
-      <p><label for="<?php echo $this->get_field_id('id_obras'); ?>">ID Obras: <input class="widefat" id="<?php echo $this->get_field_id('id_obras'); ?>" name="<?php echo $this->get_field_name('id_obras'); ?>" type="text" value="<?php echo attribute_escape($id_obras); ?>" /></label></p>
+      	<p>
+      		<label for="<?php echo $this->get_field_id('id_obras'); ?>">ID Obras:
+				<select name="<?php echo $this->get_field_name('id_obras'); ?>" id="<?php echo $this->get_field_id('id_obras'); ?>" class="widefat">
+  					<option value="">Selecione uma Obra</option>id_obras
+  					<?php
+  						if (have_posts()) {
+  							while ( have_posts() ) {
+	  							the_post();
+  								if ($id_obras_selec == get_the_ID())
+  									echo "<option value='".get_the_ID()."' selected=selected>".get_the_title()."</option>";
+								else
+									echo "<option value='".get_the_ID()."'>".get_the_title()."</option>";
+							}
+						}
+						wp_reset_query();
+					?>
+				</select>
+			</label>
+      	
+      </p>
 
       <p><input type="checkbox" name="<?php echo $this->get_field_name('chk_imagem'); ?>" id="<?php echo $this->get_field_id('chk_imagem'); ?>" value="1" <?php if ( $chk_imagem ) { echo 'checked="checked"'; } ?> /><label for="<?php echo $this->get_field_id('chk_imagem'); ?>">&nbsp;Exibir Imagem </label></p>
 
@@ -54,7 +80,7 @@ class ObrasWidget extends WP_Widget
   function widget($args, $instance)
   {
     extract($args, EXTR_SKIP);
-
+	wp_reset_query();
   	$titulo = empty($instance['titulo']) ? ' ' : apply_filters('widget_title', $instance['titulo']);
     $colunas = $instance['colunas'];    
     $css_class = $instance['css_class'];
@@ -71,12 +97,10 @@ class ObrasWidget extends WP_Widget
     //BUSCAR IMAGEM, TITULO, DESCRICAO CONFORME O ID DA OBRA
     //BUSCAR NOS POSTS
     //***************************************************************
-    
-    $args_query_post = '';
-    $args_query_post = 'p='.$id_obras;
-    query_posts($args_query_post);
+    query_posts( array( 'post' => $id_obras ) );
 
     if (have_posts()) {
+    	the_post();
       $titulo_obra = get_the_title();
       $descricao_obra = get_the_excerpt();
       $descricao_completa_obra = get_the_content();
